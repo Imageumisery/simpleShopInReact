@@ -1,3 +1,6 @@
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCartShopping } from "@fortawesome/free-solid-svg-icons";
+
 type Props = {};
 
 const Header = (props: Props) => {
@@ -22,11 +25,10 @@ const Header = (props: Props) => {
                     </li>
                 </ul>
                 <img src="/logo-black.svg" alt="" className="nav-logo" />
-                <div className="shopping-cart">
-                    shopping cart
+                <div className="shopping-cart-icon">
+                    <FontAwesomeIcon icon={faCartShopping} />
                 </div>
             </nav>
-            <h1>My wonderful shop</h1>
         </div>
     );
 };

@@ -1,4 +1,4 @@
-import { ProductType } from "../types/ProductType.ts";
+import { ProductType } from "../types/ProductType";
 
 type ProductProps = {
     product: ProductType;
@@ -8,9 +8,10 @@ const Product = (props: ProductProps) => {
     return (
         <div className="product">
             <div className="product-container">
+                <img src={props.product.image} className="product-img img" alt="high-back bench"/>
+        
                 <div className="product-icons">
                     <button className="product-cart-btn product-icon" data-id="">
-                        a
                         <i className="fas fa-shopping-cart"></i>
                     </button>
                 </div>
@@ -24,11 +25,7 @@ const Product = (props: ProductProps) => {
 };
 
 export default Product;
-/* <a href={} className="product-icon">
-                        <i className="fas fa-search"></i>
-                    </a> */
-/* <img
-                    src={}
-                    className="product-img img"
-                    alt="high-back bench"
-                ></img> */
+//<a href={} className="product-icon">
+//<i className="fas fa-search"></i>
+//</a>
+

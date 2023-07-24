@@ -6,6 +6,7 @@ const MainLayout = (props: Props) => {
     return (
         <div>
             <Header />  
+            <h1 className="title">Comfy shop products</h1>
             <Outlet />
         </div>
     );

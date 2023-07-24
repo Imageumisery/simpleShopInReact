@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
 import Product from "../Product";
+// import { ProductType } from "src/types/ProductType.ts";
 
-type Props = {};
+type Props = {
+    // product: ProductType;
+};
 
 // https://fakestoreapi.com/products/
 const ProductsPage = (props: Props) => {
@@ -21,7 +24,7 @@ const ProductsPage = (props: Props) => {
     return (
         <div className="products-container">
             {products.map((product) => (
-                <Product product={product} />
+                <Product product={product} key={product.id} />
             ))}
         </div>
     );
