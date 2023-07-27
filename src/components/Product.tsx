@@ -1,4 +1,6 @@
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ProductType } from "../types/ProductType";
+import { faSearch, faShoppingCart } from "@fortawesome/free-solid-svg-icons";
 
 type ProductProps = {
     product: ProductType;
@@ -9,10 +11,12 @@ const Product = (props: ProductProps) => {
         <div className="product">
             <div className="product-container">
                 <img src={props.product.image} className="product-img img" alt="high-back bench"/>
-        
                 <div className="product-icons">
-                    <button className="product-cart-btn product-icon" data-id="">
-                        <i className="fas fa-shopping-cart"></i>
+                    <button className="search-btn" data-id="">
+                        <FontAwesomeIcon icon={faSearch}/>
+                    </button>
+                    <button className="product-cart-btn" data-id="">
+                        <FontAwesomeIcon icon={faShoppingCart}/>
                     </button>
                 </div>
             </div>
