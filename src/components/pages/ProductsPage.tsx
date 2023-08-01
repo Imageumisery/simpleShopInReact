@@ -1,50 +1,69 @@
-import { useEffect, useState } from "react";
+import { MouseEvent, createContext, useEffect, useState } from "react";
 import Filter from "../Filter";
+import { ProductType } from "../../types/ProductType";
 import Product from "../Product";
-
-type Props = {
-};
+import { useOutletContext } from "react-router-dom";
 
 const ProductsPage = () => {
-    const [products, setProducts] = useState([]);
-    const [filteredProducts, setFilteredProducts] = useState([]);
-    useEffect(() => {
-        async function fetchData() {
-            await fetch("https://course-api.com/react-store-products")
-                .then((res) => res.json())
-                .then((response) => {
-                    setProducts(response);
-                    setFilteredProducts(response);
-                })
-                .catch(Error);
-        }
-        fetchData().catch(Error);
-    }, []);
+    const [products, setProducts] = useState<ProductType[]>([]);
+    const [filteredProducts, setFilteredProducts] = useState<ProductType[]>([]);
+    const [priceFilter, setPriceFilter] = useState<null | number>(null);
+    const [companyFilter, setCompanyFilter] = useState<string>("");
+    const [searchValue, setSearchValue] = useState<string>("");
 
-    function handleFilterClick(event: HTMLInputElement) {
-        const value = event.target.textContent;
-        if (value === "All") {
-            setFilteredProducts(products);
-        } else {
-            setFilteredProducts(
-                products.filter((product) => product.company.toLowerCase().includes(value.toLowerCase()))
-            );
-        }
+    const [contextProducts, setContextProducts] = useOutletContext();
+    
+    useEffect(() => {
+        fetchData().catch(Error);
+    }, [products, setContextProducts]);
+
+    async function fetchData() {
+        await fetch("https://course-api.com/react-store-products")
+            .then((res) => res.json())
+            .then((response) => {
+                setProducts(response);
+                setContextProducts(products);
+            });
     }
 
-    function handlePriceFilter(event: HTMLInputElement) {
-        if (!event.target.value) {
-            setFilteredProducts(products);
-        } else {
-            setFilteredProducts(products.filter((product) => product.price <= event.target.value));
-        }
+    function handleFilterClick(event: MouseEvent<HTMLDivElement>) {
+        const value = (event.target as HTMLLIElement).textContent!;
+        setCompanyFilter(value === "All" ? "" : value);
+    }
+
+    function handlePriceFilter({ target }: { target: HTMLInputElement }) {
+        setPriceFilter(+target.value || null);
+    }
+
+    function handleSearch({ target }: { target: HTMLInputElement }) {
+        setSearchValue(target.value);
+    }
+
+    function applyPriceFilter(products: ProductType[]): ProductType[] {
+        if (!priceFilter) return products;
+        return products.filter(({ price }) => price <= priceFilter);
+    }
+
+    function applyCompanyFilter(products: ProductType[]): ProductType[] {
+        if (!companyFilter) return products;
+        return products.filter(({ company }) => company.toLowerCase().includes(companyFilter.toLowerCase()));
+    }
+
+    function applySearchFilter(products: ProductType[]): ProductType[] {
+        if (!searchValue) return products;
+        return products.filter(({ name }) => name.toLowerCase().includes(searchValue.toLowerCase()));
     }
 
     return (
         <div className="products-page">
-            <Filter handleFilterClick={handleFilterClick} handlePriceFilter={handlePriceFilter} />
+            <Filter
+                currentCompanyFilter={companyFilter}
+                handleFilterClick={handleFilterClick}
+                handlePriceFilter={handlePriceFilter}
+                handleSearch={handleSearch}
+            />
             <div className="products-container">
-                {filteredProducts.map((product) => (
+                {applySearchFilter(applyCompanyFilter(applyPriceFilter(products))).map((product) => (
                     <Product product={product} key={product.id} />
                 ))}
             </div>
