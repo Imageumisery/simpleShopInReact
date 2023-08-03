@@ -1,10 +1,13 @@
 import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import { ProductsContext } from "./contexts/ProductsContext";
 
 type Props = {};
 
 const Header = (props: Props) => {
+    const { shoppingCart } = useContext(ProductsContext);
     const navigate = useNavigate();
     const routerChange = () => {
         const path = "/cart";
@@ -40,6 +43,7 @@ const Header = (props: Props) => {
                     className="shopping-cart-icon"
                     onClick={routerChange}
                 />
+                <b>{shoppingCart.length || null}</b>
             </nav>
         </div>
     );

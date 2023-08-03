@@ -5,36 +5,32 @@ import { useParams } from "react-router-dom";
 type Props = {};
 
 const ProductDetailsPage = (props: Props) => {
-  
-  const [products, setProducts] = useState<ProductType[]>();
-  const [product, setProduct] = useState<ProductType>();
+
+  const [product, setProduct] = useState<ProductType | null>(null);
   const {id} = useParams();
   useEffect(() => {
         fetchData().catch(Error);        
       }, []);
       async function fetchData() {
-        await fetch(`https://course-api.com/react-store-products/`)
+        await fetch("/mock.json")
         .then((res) => res.json())
         .then((response) => {
-          setProducts(response);
-          setProduct(products?.find(item => item.id === parseInt(id)))
+          setProduct(response?.find((item:ProductType) => item.id === id))
         })
         .catch(Error);
-      }
-      
-      console.log(id);
-    console.log(product);
-    
-    
-    
+      }   
     return (
-        <div className="cart">
-            <div className="images">
-                <img src="/public/2.png" alt="" className="cartImage" />
+        <div className="cart section-center">
+            <div className="images"> 
+                <img src={product?.image} alt="" className="cartImage" />
             </div>
             <div className="cart-content">
-                <h2 className="cart-title">AAA</h2>
-                <p className="cart-description"></p>
+                <h2 className="cart-title">{product?.name}</h2>
+                <p className="cart-price">{product?.price} ₽</p>
+                <p className="cart-description">{product?.description}</p>
+                <b>Made by <b className="cart-company">{product?.company}</b></b>
+                <hr />
+                <button className="addToCartButton">Add To Cart</button>
             </div>
         </div>
     );

@@ -1,28 +1,27 @@
-import { MouseEvent, createContext, useEffect, useState } from "react";
+import { MouseEvent, createContext, useContext, useEffect, useState } from "react";
 import Filter from "../Filter";
 import { ProductType } from "../../types/ProductType";
 import Product from "../Product";
-import { useOutletContext } from "react-router-dom";
+import { ProductsContext } from "../contexts/ProductsContext";
 
 const ProductsPage = () => {
     const [products, setProducts] = useState<ProductType[]>([]);
-    const [filteredProducts, setFilteredProducts] = useState<ProductType[]>([]);
+    // const [filteredProducts, setFilteredProducts] = useState<ProductType[]>([]);
     const [priceFilter, setPriceFilter] = useState<null | number>(null);
     const [companyFilter, setCompanyFilter] = useState<string>("");
     const [searchValue, setSearchValue] = useState<string>("");
-
-    const [contextProducts, setContextProducts] = useOutletContext();
+    
+    const { setShoppingCart } = useContext(ProductsContext)
     
     useEffect(() => {
         fetchData().catch(Error);
-    }, [products, setContextProducts]);
+    }, [products]);
 
     async function fetchData() {
-        await fetch("https://course-api.com/react-store-products")
+        await fetch("/mock.json")
             .then((res) => res.json())
             .then((response) => {
                 setProducts(response);
-                setContextProducts(products);
             });
     }
 
@@ -33,6 +32,7 @@ const ProductsPage = () => {
 
     function handlePriceFilter({ target }: { target: HTMLInputElement }) {
         setPriceFilter(+target.value || null);
+        return target.value;
     }
 
     function handleSearch({ target }: { target: HTMLInputElement }) {
@@ -54,17 +54,41 @@ const ProductsPage = () => {
         return products.filter(({ name }) => name.toLowerCase().includes(searchValue.toLowerCase()));
     }
 
+    function handleAddToCart(product: ProductType): void {
+        setShoppingCart((prev) => { 
+            const newProducts =  [...prev]
+            newProducts.push(product)
+            return newProducts;
+         })
+    }
+
+    function clearFilters() {
+        setCompanyFilter('');
+        setPriceFilter(null);
+        setSearchValue('');
+    }
+
+    function getFilters():FiltersType {
+        const filter:FiltersType = {
+            handleFilterClick: handleFilterClick,
+            handlePriceFilter:handlePriceFilter,
+            priceValue:priceFilter!,
+            searchValue:searchValue,
+            handleSearch:handleSearch,
+            currentCompanyFilter:companyFilter,
+            clearFilter:clearFilters,
+        }
+        return filter;
+    }
+
     return (
         <div className="products-page">
             <Filter
-                currentCompanyFilter={companyFilter}
-                handleFilterClick={handleFilterClick}
-                handlePriceFilter={handlePriceFilter}
-                handleSearch={handleSearch}
+            filters={}
             />
             <div className="products-container">
                 {applySearchFilter(applyCompanyFilter(applyPriceFilter(products))).map((product) => (
-                    <Product product={product} key={product.id} />
+                    <Product handleAddToCart={handleAddToCart} product={product} key={product.id} />
                 ))}
             </div>
         </div>

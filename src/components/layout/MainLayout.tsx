@@ -1,17 +1,18 @@
-import { useState } from "react";
 import { Outlet } from "react-router-dom";
 import Header from "../Header";
-import { ContextType } from "../../types/ContextType";
-
-
+import { ProductsContext } from "../contexts/ProductsContext";
+import { useState } from "react";
+import { ProductType } from "../../types/ProductType";
 
 const MainLayout = () => {
-    const [context, setContext] = useState<ContextType | null>();
+    const [shoppingCart, setShoppingCart] = useState<ProductType[]>([]);
     return (
         <div>
-            <Header />  
-            <h1 className="title">Comfy shop products</h1>
-            <Outlet context={[context, setContext]}/>
+            <ProductsContext.Provider value={{ setShoppingCart, shoppingCart }}>
+                <Header />
+                <h1 className="title">Comfy shop products</h1>
+                <Outlet />
+            </ProductsContext.Provider>
         </div>
     );
 };
