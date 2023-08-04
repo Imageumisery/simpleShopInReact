@@ -1,8 +1,8 @@
 type FiltersType = {
     handleFilterClick: any;
-    handlePriceFilter: any;
+    // handlePriceFilter: any;
     currentCompanyFilter: string;
-    handleSearch: any;
+    // handleSearch: any;
     clearFilter: VoidFunction;
     searchValue: string;
     priceValue: number;
