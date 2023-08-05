@@ -3,7 +3,11 @@ type Props = {}
 
 const ProductCartPage = (props: Props) => {
   return (
-    <div>ProductCartPage</div>
+    <div className="product-cart">
+      <div className="product-cart-item">
+        a
+      </div>
+    </div>
   )
 }
 

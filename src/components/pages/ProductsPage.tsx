@@ -6,16 +6,18 @@ import { ProductsContext } from "../contexts/ProductsContext";
 
 const ProductsPage = () => {
     const [products, setProducts] = useState<ProductType[]>([]);
-    const [filters, setFilters] = useState<FiltersType>();
-    // const [filteredProducts, setFilteredProducts] = useState<ProductType[]>([]);
-    // const [priceFilter, setPriceFilter] = useState<null | number>(null);
-    // const [companyFilter, setCompanyFilter] = useState<string>("");
-    // const [searchValue, setSearchValue] = useState<string>("");
-
+    const [filters, setFilters] = useState<FiltersType>({
+        clearFilter: clearFilters,
+        searchValue: "",
+        priceValue: 0,
+        currentCompanyFilter: "All",
+    });
     const { setShoppingCart } = useContext(ProductsContext);
 
     useEffect(() => {
-        fetchData().catch(Error);
+        if (products.length === 0) {
+            fetchData().catch(Error);
+        }
     }, [products]);
 
     async function fetchData() {
@@ -23,6 +25,7 @@ const ProductsPage = () => {
             .then((res) => res.json())
             .then((response) => {
                 setProducts(response);
+                console.log(response);
             });
     }
 
@@ -45,6 +48,8 @@ const ProductsPage = () => {
         // setSearchValue(target.value);
         const newFilter: FiltersType = Object.assign({}, filters);
         newFilter.searchValue = target.value;
+        console.log(target.value);
+
         setFilters(newFilter);
     }
 
@@ -57,45 +62,44 @@ const ProductsPage = () => {
     }
 
     function clearFilters() {
-        let newFilter:FiltersType = Object.assign({}, filters);
+        let newFilter: FiltersType = Object.assign({}, filters);
         newFilter.priceValue = 0;
-        newFilter.currentCompanyFilter = '';
-        newFilter.searchValue = '';
+        newFilter.currentCompanyFilter = "";
+        newFilter.searchValue = "";
         setFilters(newFilter);
     }
 
-    function filterProducts(products: ProductType[]) {
-        let filteredProducts = [];
-        if (!filters?.priceValue) {
-            return products;
-        } else {
-            filteredProducts = products.filter(({ price }) => price <= priceFilter);
-        }
-        if (!filters?.currentCompanyFilter) {
-            return products;
-        } else {
-            filteredProducts = products.filter(({ company }) =>
-                company.toLowerCase().includes(companyFilter.toLowerCase())
+    function filter(products: ProductType[]) {
+        const companyFilter = filters.currentCompanyFilter.toLowerCase();
+        const All = 'all';
+        let filteredProducts: ProductType[] = products;
+        if (filters.priceValue)
+            filteredProducts = filteredProducts.filter(({ price }) => price <= filters.priceValue);
+        if (companyFilter && companyFilter !== All) {
+            filteredProducts = filteredProducts.filter(({ company }) =>
+            company.toLowerCase().includes(companyFilter)
             );
         }
-        if (!filters?.searchValue) {
-            return products;
-        } else {
-            filteredProducts = products.filter(({ name }) =>
-                name.toLowerCase().includes(searchValue.toLowerCase())
+        if (filters.searchValue)
+            filteredProducts = filteredProducts.filter(({ name }) =>
+                name.toLowerCase().includes(filters.searchValue.toLowerCase())
             );
-        }
-        return filteredProducts || products;
+        console.log(filteredProducts);
+
+        return filteredProducts;
     }
 
-    function changeFilters() {
-        
-    }
     return (
         <div className="products-page">
-            <Filter filters={filters!} setFilters={changeFilters}/>
+            <Filter
+                filters={filters!}
+                handlePriceFilter={handlePriceFilter}
+                handleSearch={handleSearch}
+                clearFilters={clearFilters}
+                handleFilterClick={handleFilterClick}
+            />
             <div className="products-container">
-                {filterProducts(products).map((product) => (
+                {filter(products).map((product) => (
                     <Product handleAddToCart={handleAddToCart} product={product} key={product.id} />
                 ))}
             </div>
