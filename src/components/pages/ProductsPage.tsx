@@ -1,10 +1,12 @@
-import { MouseEvent, createContext, useContext, useEffect, useState } from "react";
-import Filter from "../Filter";
+import { MouseEvent, useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import { ProductType } from "../../types/ProductType";
+import Filter from "../Filter";
 import Product from "../Product";
-import { ProductsContext } from "../contexts/ProductsContext";
+import { addToCartAction } from "../../store/products.actions";
 
 const ProductsPage = () => {
+    const dispatch = useDispatch();
     const [products, setProducts] = useState<ProductType[]>([]);
     const [filters, setFilters] = useState<FiltersType>({
         clearFilter: clearFilters,
@@ -12,7 +14,6 @@ const ProductsPage = () => {
         priceValue: 0,
         currentCompanyFilter: "All",
     });
-    const { setShoppingCart } = useContext(ProductsContext);
 
     useEffect(() => {
         if (products.length === 0) {
@@ -54,11 +55,7 @@ const ProductsPage = () => {
     }
 
     function handleAddToCart(product: ProductType): void {
-        setShoppingCart((prev) => {
-            const newProducts = [...prev];
-            newProducts.push(product);
-            return newProducts;
-        });
+        dispatch(addToCartAction({amount:1, product}))
     }
 
     function clearFilters() {

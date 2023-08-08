@@ -1,49 +1,56 @@
 import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useContext } from "react";
-import { useNavigate } from "react-router-dom";
-import { ProductsContext } from "./contexts/ProductsContext";
+import { Link, useNavigate } from "react-router-dom";
+import { useAppSelector } from "../store/useAppSelector";
 
 type Props = {};
 
 const Header = (props: Props) => {
-    const { shoppingCart } = useContext(ProductsContext);
+    const shoppingCart = useAppSelector((state) => state.products.shoppingCart);
     const navigate = useNavigate();
-    const routerChange = () => {
-        const path = "/cart";
-        navigate(path);
+    const productsPageLink = "/products";
+    const homePageLink = "/home";
+    const aboutPageLink = "/about";
+    const cartPageLink = "/cart";
+
+    const goTo = (link: string) => {
+        navigate(link);
     };
-    const returnHome = () => {
-        const path = "/products";
-        navigate(path);
-    };
+
     return (
         <div className="header">
             <nav>
                 <ul className="nav-links">
                     <li>
-                        <a onClick={returnHome} className="nav-link">
+                        <Link to={homePageLink} className="nav-link">
                             home
-                        </a>
+                        </Link>
                     </li>
                     <li>
-                        <a href="/products" className="nav-link">
+                        <Link to={productsPageLink} className="nav-link">
                             products
-                        </a>
+                        </Link>
                     </li>
                     <li>
-                        <a href="/about" className="nav-link">
+                        <Link to={aboutPageLink} className="nav-link">
                             about
-                        </a>
+                        </Link>
                     </li>
                 </ul>
-                <img onClick={returnHome} src="/logo-black.svg" alt="" className="nav-logo" />
-                <FontAwesomeIcon
-                    icon={faShoppingCart}
-                    className="shopping-cart-icon"
-                    onClick={routerChange}
+                <img
+                    onClick={() => goTo(productsPageLink)}
+                    src="/logo-black.svg"
+                    alt=""
+                    className="nav-logo"
                 />
-                <b>{shoppingCart.length || null}</b>
+                <div className="shopping-cart">
+                    <FontAwesomeIcon
+                        icon={faShoppingCart}
+                        className="shopping-cart-icon"
+                        onClick={() => goTo(cartPageLink)}
+                    />
+                    <b className="shopping-cart-indicator">{shoppingCart.length || null}</b>
+                </div>
             </nav>
         </div>
     );
