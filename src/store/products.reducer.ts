@@ -11,10 +11,11 @@ const initialState: ProductState = {
 };
 
 export const productsReducer = (state = initialState, action: ProductActions): ProductState => {
+const productIdFromCart = action.payload.product.id;
     switch (action.type) {
         case ProductActionTypes.Add:
             const productIndex = state.shoppingCart.findIndex(
-                (item) => item.product.id === action.payload.product.id
+                (item) => item.product.id === productIdFromCart
             );
             if (productIndex < 0) {
                 const newCart = [...state.shoppingCart, action.payload];
@@ -28,8 +29,27 @@ export const productsReducer = (state = initialState, action: ProductActions): P
             state.shoppingCart[productIndex] = modifiedProduct;
             return { ...state, shoppingCart: [...state.shoppingCart] };
         case ProductActionTypes.Remove:
-            const newCart2 = state.shoppingCart.filter(({ product }) => product.id !== action.payload.id);
+            const newCart2 = state.shoppingCart.filter(({ product }) => product.id !== productIdFromCart);
             return { ...state, shoppingCart: newCart2 };
+
+        case ProductActionTypes.Increase:
+            const increasedAmountCartIndex = state?.shoppingCart.findIndex((cart) => cart.product.id === productIdFromCart);
+            const cartItem = state.shoppingCart[increasedAmountCartIndex];
+            const modifiedCartItem:ShoppingCartItem = {
+                ...cartItem,
+                amount: ++cartItem.amount,
+            };
+            state.shoppingCart[increasedAmountCartIndex] = modifiedCartItem;
+            return {...state, shoppingCart: [...state.shoppingCart]};
+        case ProductActionTypes.Decrease:
+            const decreasedAmountCartIndex = state.shoppingCart.findIndex((cart) => cart.product.id === productIdFromCart);
+            const cartItem1 = state.shoppingCart[decreasedAmountCartIndex];
+            const modifiedCartItem1:ShoppingCartItem = {
+                ...cartItem1,
+                amount: --cartItem1.amount,
+            };
+            state.shoppingCart[decreasedAmountCartIndex] = modifiedCartItem1;
+            return {...state, shoppingCart: [...state.shoppingCart]};
         default:
             return state;
     }

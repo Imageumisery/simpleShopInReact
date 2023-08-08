@@ -3,13 +3,14 @@ import { useAppSelector } from "../../store/useAppSelector";
 import { removeFromCartAction } from "../../store/products.actions";
 import { faMinus, faPlus, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { ShoppingCartItem } from "../../types/ShoppingCartItem";
 
 const ProductCartPage = () => {
     const shoppingCart = useAppSelector((state) => state.products.shoppingCart);
     const dispatch = useDispatch();
 
-    function handleRemove(id: string): void {
-        dispatch(removeFromCartAction({ id }));
+    function handleRemove(item: ShoppingCartItem): void {
+        dispatch(removeFromCartAction(item));
     }
     // function increaseAmount(id: string): void {
     //     dispatch(removeFromCartAction({ id }));
@@ -36,7 +37,7 @@ const ProductCartPage = () => {
                             <p className="cart-item-price">{item.product.price * item.amount} ₽</p>
                             <FontAwesomeIcon
                                 className="cart-item-remove-btn"
-                                onClick={() => handleRemove(item.product.id)}
+                                onClick={() => handleRemove(item)}
                                 icon={faTrashCan}
                             />
                         </div>

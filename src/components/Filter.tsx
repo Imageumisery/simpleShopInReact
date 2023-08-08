@@ -31,7 +31,7 @@ const Filter = ({ filters, handlePriceFilter, handleSearch, clearFilters, handle
                 <input type="number" className="filter-price" onChange={handlePriceFilter} value={filters.priceValue || ''}/>
             </div>
             <button className="clear-filter-btn" onClick={clearFilters}>
-                Clear Filter
+                Clear Filters
             </button>
         </div>
     );

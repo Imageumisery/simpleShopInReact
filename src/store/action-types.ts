@@ -1,4 +1,6 @@
 export const enum ProductActionTypes {
     Add ='add',
-    Remove = 'remove'
+    Remove = 'remove',
+    Increase = 'increase',
+    Decrease = 'decrease'
 }

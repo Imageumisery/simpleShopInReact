@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Lobster&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Gentium+Plus&family=Libre+Baskerville&display=swap");
 *,
 ::after,
 ::before {
@@ -12,7 +12,8 @@
 body {
     margin: 0;
     min-height: 100vh;
-    font-family: "Lucida Sans", sans-serif;
+    font-family: "Gentium Plus", serif;
+    font-size: 1.3rem;
 }
 
 .section-center {
@@ -36,7 +37,7 @@ a {
 }
 
 .header {
-    font-family: "Lobster", cursive;
+    font-family: "Libre Baskerville", serif;
     padding: 2% 0;
     top: 0;
     position: sticky;
@@ -55,7 +56,7 @@ nav {
 }
 
 nav li {
-    margin-right: 25%;
+    margin-right: 10%;
 }
 
 .title {
@@ -74,15 +75,67 @@ ul {
     display: flex;
     justify-content: space-between;
 }
-
+/* --- NavlinksHover --- */
 a {
     text-transform: uppercase;
     font-weight: 500;
-    color: black;
-    text-decoration: inherit;
+    text-decoration: none;
+    background: transparent;
+    color: #141929;
+    border: none;
+    text-transform: uppercase;
+    position: relative;
+    transition: 0.5s ease;
 }
-a:hover {
+nav li {
+    text-transform: uppercase;
+    padding: 0.4em 0.7em;
+    font-weight: 500;
+    text-decoration: none;
+    background: transparent;
+    color: #141929;
+    border: none;
+    text-transform: uppercase;
+    position: relative;
+    transition: 0.5s ease;
+}
+
+nav li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 2px;
+    width: 0;
+    background-color: #d1ac54;
+    transition: 0.5s ease;
+}
+
+/* nav li:hover a {
     color: #535bf2;
+    transition-delay: 0.5s;
+} */
+
+nav li:hover::before {
+    width: 100%;
+}
+
+nav li::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 0;
+    width: 100%;
+    background-color: #d1ac54;
+    transition: 0.4s ease;
+    z-index: -1;
+}
+
+nav li:hover::after {
+    height: 100%;
+    transition-delay: 0.4s;
+    color: aliceblue;
 }
 
 h1 {
@@ -106,6 +159,15 @@ button,
     cursor: pointer;
     transition: all ease-in-out 0.2s;
 }
+
+.cart-item-remove-btn:hover {
+    color: crimson;
+}
+
+.cart-item-amount-minus, 
+.cart-item-amount-plus {
+    color: darkcyan;
+}
 /* button:focus,
 button:focus-visible {
     outline: 4px auto -webkit-focus-ring-color;
@@ -127,8 +189,7 @@ button:focus-visible {
 .shopping-cart-indicator {
     cursor: pointer;
     font-size: 1.2rem;
-    padding-left: 0.5em;
-    padding-right: 0.5em;
+    padding: 0.1em 0.4em;
     color: aliceblue;
     position: absolute;
     border-radius: 50%;
@@ -156,10 +217,28 @@ button:focus-visible {
 }
 
 input {
-    border-radius: 10px;
-    border-color: hsl(210, 18%, 82%);
+    /* border-color: hsl(210, 18%, 82%); */
+    font-size: 1.3rem;
     min-height: 2rem;
     min-width: 180px;
+    color: #141929;
+    border: 2px solid #8707ff;
+    border-radius: 10px;
+    padding: 10px 25px;
+    background: transparent;
+}
+
+input:active {
+    border: 2px solid #8707ff;
+
+    box-shadow: 2px 2px 15px #8707ff inset;
+    /* box-shadow: 0 0 0 .15vw skyblue; */
+    /* border-color: #8707ff; */
+}
+
+input:focus-visible {
+    outline: unset;
+    border-color: #8707ff;
 }
 
 .filter {
@@ -167,11 +246,11 @@ input {
 }
 
 .filter p {
-    font-size: 1.5rem;
+    font-size: 1.7rem;
 }
 
 .filter-params {
-    font-size: 1.5rem;
+    font-size: 1.7rem;
     list-style: none;
 }
 
@@ -182,6 +261,7 @@ input {
 
 .filter-params li:hover {
     color: #535bf2;
+    outline: 20px solid rgba(250, 235, 215, 0.418);
     background-color: rgba(250, 235, 215, 0.418);
 }
 
@@ -192,7 +272,7 @@ input {
 .clear-filter-btn {
     background-color: #535bf2;
     color: white;
-    padding: 0.3em;
+    padding: 0.2em 0.4em;
     margin-top: 2.4rem;
     font-size: 1.5rem;
     transition: all 0.2s ease-out;
@@ -205,10 +285,6 @@ input {
 .filter-price-container p {
     display: inline;
     margin-right: 10px;
-}
-
-input {
-    font-size: 1.3rem;
 }
 
 /* --- PRODUCTS ---- */
@@ -249,26 +325,25 @@ input {
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-67%, -130%);
+    transform: translate(-67%, -200%);
     opacity: 0;
     display: flex;
 }
 
 .product-cart-btn,
 .search-btn {
-    color: #5499d1;
+    color: #549fdc;
 }
 
 .product-cart-btn:hover {
-    color: #68b3c0;
+    color: #88ccd8;
 }
 
 .search-btn:hover {
     color: #88ccd8;
 }
 
-.product-cart-btn:hover,
-.search-btn:hover .img {
+.product-cart-btn:hover .img {
     opacity: 0.7;
 }
 
@@ -276,9 +351,10 @@ input {
     opacity: 0.9;
 }
 
-.product-name {
+.product-name,
+.product-price {
     text-transform: capitalize;
-    font-weight: 500;
+    font-size: 1.3em;
 }
 
 /* --- CartPage ---- */

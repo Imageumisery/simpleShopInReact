@@ -6,23 +6,35 @@ export interface AddToCartAction {
     payload: ShoppingCartItem;
 }
 
-export interface RemoveToCartAction {
-    type: ProductActionTypes.Remove;
-    payload: { id: string };
-}
+export type ProductActions = {
+    type: ProductActionTypes;
+    payload: ShoppingCartItem;
+};
 
-export type ProductActions = AddToCartAction | RemoveToCartAction;
-
-export const addToCartAction = (payload: ShoppingCartItem): AddToCartAction => {
+export const addToCartAction = (payload: ShoppingCartItem): ProductActions => {
     return {
         type: ProductActionTypes.Add,
         payload,
     };
 };
 
-export const removeFromCartAction = (payload: { id: string }): RemoveToCartAction => {
+export const removeFromCartAction = (payload: ShoppingCartItem): ProductActions => {
     return {
         type: ProductActionTypes.Remove,
+        payload,
+    };
+};
+
+export const increaseAmount = (payload: ShoppingCartItem): ProductActions => {
+    return {
+        type: ProductActionTypes.Increase,
+        payload,
+    };
+};
+
+export const decreaseAmount = (payload: ShoppingCartItem): ProductActions => {
+    return {
+        type: ProductActionTypes.Decrease,
         payload,
     };
 };
