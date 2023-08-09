@@ -22,7 +22,7 @@ const ProductsPage = () => {
     }, [products]);
 
     async function fetchData() {
-        await fetch("/mock.json")
+        await fetch("https://course-api.com/react-store-products/")
             .then((res) => res.json())
             .then((response) => {
                 setProducts(response);

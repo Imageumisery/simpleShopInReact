@@ -406,6 +406,20 @@ input:focus-visible {
 /* --- ShoppingCartPage ---- */
 
 .product-cart-header {
+    margin-left: 140px;
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.product-cart-header p{
+    font-size: 2rem;
+}
+
+.product-cart-header-itemName {
+    margin-right: 60px;
+}
+
+.product-cart-header {
     font-size: 1.5rem;
     color: #999;
 }
@@ -425,6 +439,10 @@ input:focus-visible {
     place-items: center;
 }
 
+.cart-item-content p{
+    font-size: 1.8rem;
+}
+
 .cart-item-img {
     width: 10vw;
     height: 12vh;
@@ -432,7 +450,6 @@ input:focus-visible {
 
 .cart-item-price {
     color: #d1ac54;
-    font-size: 1.2rem;
 }
 
 /* --- ShoppingCartColumns ---- */
@@ -440,7 +457,7 @@ input:focus-visible {
 .cart-item-name,
 .cart-item-amount {
     text-transform: capitalize;
-    font-size: 1.6rem;
+    font-size: 1.9rem;
     place-items: center;
 }
 

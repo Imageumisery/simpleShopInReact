@@ -11,11 +11,10 @@ const initialState: ProductState = {
 };
 
 export const productsReducer = (state = initialState, action: ProductActions): ProductState => {
-const productIdFromCart = action.payload.product.id;
     switch (action.type) {
         case ProductActionTypes.Add:
             const productIndex = state.shoppingCart.findIndex(
-                (item) => item.product.id === productIdFromCart
+                (item) => item.product.id === action.payload.product.id
             );
             if (productIndex < 0) {
                 const newCart = [...state.shoppingCart, action.payload];
@@ -29,11 +28,14 @@ const productIdFromCart = action.payload.product.id;
             state.shoppingCart[productIndex] = modifiedProduct;
             return { ...state, shoppingCart: [...state.shoppingCart] };
         case ProductActionTypes.Remove:
-            const newCart2 = state.shoppingCart.filter(({ product }) => product.id !== productIdFromCart);
+            
+            const newCart2 = state.shoppingCart.filter(({ product }) => product.id !== action.payload.product.id);
             return { ...state, shoppingCart: newCart2 };
 
+
+
         case ProductActionTypes.Increase:
-            const increasedAmountCartIndex = state?.shoppingCart.findIndex((cart) => cart.product.id === productIdFromCart);
+            const increasedAmountCartIndex = state.shoppingCart.findIndex((cart) => cart.product.id === action.payload.product.id);
             const cartItem = state.shoppingCart[increasedAmountCartIndex];
             const modifiedCartItem:ShoppingCartItem = {
                 ...cartItem,
@@ -42,7 +44,7 @@ const productIdFromCart = action.payload.product.id;
             state.shoppingCart[increasedAmountCartIndex] = modifiedCartItem;
             return {...state, shoppingCart: [...state.shoppingCart]};
         case ProductActionTypes.Decrease:
-            const decreasedAmountCartIndex = state.shoppingCart.findIndex((cart) => cart.product.id === productIdFromCart);
+            const decreasedAmountCartIndex = state.shoppingCart.findIndex((cart) => cart.product.id === action.payload.product.id);
             const cartItem1 = state.shoppingCart[decreasedAmountCartIndex];
             const modifiedCartItem1:ShoppingCartItem = {
                 ...cartItem1,
