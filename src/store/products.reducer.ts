@@ -2,12 +2,14 @@ import { ShoppingCartItem } from "../types/ShoppingCartItem";
 import { ProductActionTypes } from "./action-types";
 import { ProductActions } from "./products.actions";
 
+export const CART_LOCAL_STORAGE_KEY = 'shopping-cart';
+
 interface ProductState {
     shoppingCart: ShoppingCartItem[];
 }
 
 const initialState: ProductState = {
-    shoppingCart: [],
+    shoppingCart: JSON.parse(localStorage.getItem(CART_LOCAL_STORAGE_KEY) || '[]'),
 };
 
 export const productsReducer = (state = initialState, action: ProductActions): ProductState => {
@@ -26,32 +28,39 @@ export const productsReducer = (state = initialState, action: ProductActions): P
                 amount: ++originalProduct.amount,
             };
             state.shoppingCart[productIndex] = modifiedProduct;
+            localStorage.setItem(CART_LOCAL_STORAGE_KEY, JSON.stringify(state.shoppingCart));
             return { ...state, shoppingCart: [...state.shoppingCart] };
         case ProductActionTypes.Remove:
-            
-            const newCart2 = state.shoppingCart.filter(({ product }) => product.id !== action.payload.product.id);
+            const newCart2 = state.shoppingCart.filter(
+                ({ product }) => product.id !== action.payload.product.id
+            );
+            localStorage.setItem(CART_LOCAL_STORAGE_KEY, JSON.stringify(newCart2));
             return { ...state, shoppingCart: newCart2 };
 
-
-
         case ProductActionTypes.Increase:
-            const increasedAmountCartIndex = state.shoppingCart.findIndex((cart) => cart.product.id === action.payload.product.id);
+            const increasedAmountCartIndex = state.shoppingCart.findIndex(
+                (cart) => cart.product.id === action.payload.product.id
+            );
             const cartItem = state.shoppingCart[increasedAmountCartIndex];
-            const modifiedCartItem:ShoppingCartItem = {
+            const modifiedCartItem: ShoppingCartItem = {
                 ...cartItem,
                 amount: ++cartItem.amount,
             };
             state.shoppingCart[increasedAmountCartIndex] = modifiedCartItem;
-            return {...state, shoppingCart: [...state.shoppingCart]};
+            localStorage.setItem(CART_LOCAL_STORAGE_KEY, JSON.stringify(state.shoppingCart));
+            return { ...state, shoppingCart: [...state.shoppingCart] };
         case ProductActionTypes.Decrease:
-            const decreasedAmountCartIndex = state.shoppingCart.findIndex((cart) => cart.product.id === action.payload.product.id);
+            const decreasedAmountCartIndex = state.shoppingCart.findIndex(
+                (cart) => cart.product.id === action.payload.product.id
+            );
             const cartItem1 = state.shoppingCart[decreasedAmountCartIndex];
-            const modifiedCartItem1:ShoppingCartItem = {
+            const modifiedCartItem1: ShoppingCartItem = {
                 ...cartItem1,
-                amount: --cartItem1.amount,
+                amount: cartItem1.amount <= 1 ? cartItem1.amount : --cartItem1.amount,
             };
             state.shoppingCart[decreasedAmountCartIndex] = modifiedCartItem1;
-            return {...state, shoppingCart: [...state.shoppingCart]};
+            localStorage.setItem(CART_LOCAL_STORAGE_KEY, JSON.stringify(state.shoppingCart));
+            return { ...state, shoppingCart: [...state.shoppingCart] };
         default:
             return state;
     }

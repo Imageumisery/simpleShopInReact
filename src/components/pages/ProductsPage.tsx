@@ -1,9 +1,15 @@
+import {
+    faArrowDownZA,
+    faArrowUpAZ,
+    faList
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { MouseEvent, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
+import { addToCartAction } from "../../store/products.actions";
 import { ProductType } from "../../types/ProductType";
 import Filter from "../Filter";
 import Product from "../Product";
-import { addToCartAction } from "../../store/products.actions";
 
 const ProductsPage = () => {
     const dispatch = useDispatch();
@@ -26,12 +32,10 @@ const ProductsPage = () => {
             .then((res) => res.json())
             .then((response) => {
                 setProducts(response);
-                console.log(response);
             });
     }
 
     function handleFilterClick(event: MouseEvent<HTMLDivElement>) {
-        // setCompanyFilter(value === "All" ? "" : value);
         const value = (event.target as HTMLLIElement).textContent!;
         const newFilter: FiltersType = Object.assign({}, filters);
         newFilter.currentCompanyFilter = value;
@@ -39,23 +43,19 @@ const ProductsPage = () => {
     }
 
     function handlePriceFilter({ target }: { target: HTMLInputElement }) {
-        // setPriceFilter(+target.value || null);
         const newFilter: FiltersType = Object.assign({}, filters);
         newFilter.priceValue = +target?.value;
         setFilters(newFilter);
     }
 
     function handleSearch({ target }: { target: HTMLInputElement }) {
-        // setSearchValue(target.value);
         const newFilter: FiltersType = Object.assign({}, filters);
         newFilter.searchValue = target.value;
-        console.log(target.value);
-
         setFilters(newFilter);
     }
 
     function handleAddToCart(product: ProductType): void {
-        dispatch(addToCartAction({amount:1, product}))
+        dispatch(addToCartAction({ amount: 1, product }));
     }
 
     function clearFilters() {
@@ -68,28 +68,26 @@ const ProductsPage = () => {
 
     function filter(products: ProductType[]) {
         const companyFilter = filters.currentCompanyFilter.toLowerCase();
-        const All = 'all';
+        const All = "all";
         let filteredProducts: ProductType[] = products;
         if (filters.priceValue)
             filteredProducts = filteredProducts.filter(({ price }) => price <= filters.priceValue);
         if (companyFilter && companyFilter !== All) {
             filteredProducts = filteredProducts.filter(({ company }) =>
-            company.toLowerCase().includes(companyFilter)
+                company.toLowerCase().includes(companyFilter)
             );
         }
         if (filters.searchValue)
             filteredProducts = filteredProducts.filter(({ name }) =>
                 name.toLowerCase().includes(filters.searchValue.toLowerCase())
             );
-        console.log(filteredProducts);
-
         return filteredProducts;
     }
 
     return (
         <div className="products-page">
             <Filter
-                filters={filters!}
+                filters={filters}
                 handlePriceFilter={handlePriceFilter}
                 handleSearch={handleSearch}
                 clearFilters={clearFilters}
@@ -103,5 +101,16 @@ const ProductsPage = () => {
         </div>
     );
 };
+
+<div className="sorting">
+<div className="sort-btn-container">
+    <FontAwesomeIcon icon={faList} />
+    <FontAwesomeIcon icon={faList} />
+    {/* <FontAwesomeIcon icon={faListAlt} /> */}
+</div>
+<hr />
+<FontAwesomeIcon icon={faArrowUpAZ} />
+<FontAwesomeIcon icon={faArrowDownZA} />
+</div>
 
 export default ProductsPage;

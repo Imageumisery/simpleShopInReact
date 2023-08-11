@@ -1,11 +1,6 @@
 import { ShoppingCartItem } from "../types/ShoppingCartItem";
 import { ProductActionTypes } from "./action-types";
 
-export interface AddToCartAction {
-    type: ProductActionTypes.Add;
-    payload: ShoppingCartItem;
-}
-
 export type ProductActions = {
     type: ProductActionTypes;
     payload: ShoppingCartItem;
